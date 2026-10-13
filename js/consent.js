@@ -6,7 +6,7 @@
 (function () {
   "use strict";
 
-  var PIXEL_ID = ""; // z. B. "123456789012345"
+  var PIXEL_ID = "3126607851015506";
   var KEY = "ayf_consent_v1";
   var memory = null; // Fallback, falls localStorage blockiert ist
   var pixelLoaded = false;
