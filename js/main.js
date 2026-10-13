@@ -121,7 +121,20 @@
   var modalOverlay = document.getElementById("modalOverlay");
   var modalClose = document.getElementById("modalClose");
 
+  /* Trichter-Ereignisse (gehen nur raus, wenn zugestimmt wurde; siehe consent.js) */
+  var funnelSent = {};
+  function trackOnce(name) {
+    if (funnelSent[name]) return;
+    funnelSent[name] = true;
+    if (window.ayfTrack) window.ayfTrack(name, {}, true);
+  }
+  ["contactForm"].forEach(function (id) {
+    var f = document.getElementById(id);
+    if (f) f.addEventListener("focusin", function () { trackOnce("InquiryStart"); });
+  });
+
   function openModal() {
+    trackOnce("InquiryOpen");
     modalOverlay.classList.add("is-open");
     document.body.style.overflow = "hidden";
   }
@@ -241,6 +254,7 @@
           submitBtn.textContent = "Anfrage senden";
           submitBtn.disabled = false;
           if (onSuccess) onSuccess();
+          if (window.ayfTrack) window.ayfTrack("Lead", { content_name: "Hochzeitsanfrage" });
           showThanks(data.name);
         })
         .catch(function () {
