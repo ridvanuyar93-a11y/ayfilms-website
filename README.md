@@ -15,8 +15,8 @@ Danach bekommst du eine `*.vercel.app`-URL zum Testen.
 
 Das Formular verschickt Mails über ein Gmail-Konto (nodemailer). Dafür braucht ihr
 ein **App-Passwort** für das Gmail-Konto, von dem aus die Mails verschickt werden
-(muss nicht ayfilms@outlook.de sein — kann auch ein anderes Konto sein, das
-AN ayfilms@outlook.de weiterleitet):
+(Anfragen gehen standardmäßig an dieses Gmail-Konto selbst; optional
+mit der Variable `CONTACT_TO` an eine andere Adresse):
 
 1. Auf [myaccount.google.com/apppasswords](https://myaccount.google.com/apppasswords)
    ein App-Passwort erstellen (2FA muss dafür aktiv sein).

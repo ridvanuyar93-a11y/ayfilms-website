@@ -1,6 +1,9 @@
 const nodemailer = require("nodemailer");
 
-const TARGET_EMAIL = "ayfilms@outlook.de";
+// Empfänger: optional CONTACT_TO, sonst das Gmail-Konto, das auch versendet (GMAIL_USER)
+function getTarget() {
+  return process.env.CONTACT_TO || process.env.GMAIL_USER;
+}
 
 function escapeHtml(str) {
   return String(str || "")
@@ -75,7 +78,7 @@ module.exports = async function handler(req, res) {
 
     await transporter.sendMail({
       from: `"ayfilms Website" <${process.env.GMAIL_USER}>`,
-      to: TARGET_EMAIL,
+      to: getTarget(),
       replyTo: email,
       subject: subject,
       text: textBody,
