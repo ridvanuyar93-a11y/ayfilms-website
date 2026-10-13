@@ -163,6 +163,37 @@
     fabIo.observe(contactSection);
   }
 
+  /* ---------- Danke-Overlay ---------- */
+  var thanksOverlay = document.getElementById("thanksOverlay");
+  var thanksName = document.getElementById("thanksName");
+  var thanksDone = document.getElementById("thanksDone");
+  var thanksClose = document.getElementById("thanksClose");
+
+  function showThanks(name) {
+    if (!thanksOverlay) return;
+    thanksName.textContent = name ? ", " + name : "";
+    thanksOverlay.classList.add("is-open");
+    thanksOverlay.setAttribute("aria-hidden", "false");
+    document.body.style.overflow = "hidden";
+    if (thanksDone) thanksDone.focus();
+  }
+  function hideThanks() {
+    if (!thanksOverlay) return;
+    thanksOverlay.classList.remove("is-open");
+    thanksOverlay.setAttribute("aria-hidden", "true");
+    document.body.style.overflow = "";
+  }
+  if (thanksDone) thanksDone.addEventListener("click", hideThanks);
+  if (thanksClose) thanksClose.addEventListener("click", hideThanks);
+  if (thanksOverlay) {
+    thanksOverlay.addEventListener("click", function (e) {
+      if (e.target === thanksOverlay) hideThanks();
+    });
+  }
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" && thanksOverlay && thanksOverlay.classList.contains("is-open")) hideThanks();
+  });
+
   /* ---------- Form submission (both forms post to /api/contact) ---------- */
   function wireForm(formEl, statusEl, submitBtn, onSuccess) {
     if (!formEl) return;
@@ -204,12 +235,13 @@
           return res.json();
         })
         .then(function () {
-          statusEl.textContent = "Danke! Eure Anfrage ist angekommen — wir melden uns bald. 🤍";
-          statusEl.className = "form-status ok";
+          statusEl.textContent = "";
+          statusEl.className = "form-status";
           formEl.reset();
           submitBtn.textContent = "Anfrage senden";
           submitBtn.disabled = false;
-          if (onSuccess) setTimeout(onSuccess, 1600);
+          if (onSuccess) onSuccess();
+          showThanks(data.name);
         })
         .catch(function () {
           statusEl.textContent = "Da ist etwas schiefgelaufen. Schreibt uns gern direkt an ayfilms@outlook.de.";

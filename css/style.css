@@ -1231,3 +1231,114 @@ p { margin: 0; }
 @media (min-width: 1100px) {
   .gallery-grid { column-count: 4; }
 }
+
+
+/* ---------- Danke-Overlay ---------- */
+
+.thanks-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  background: rgba(5, 5, 6, 0.86);
+  backdrop-filter: blur(6px);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 16px;
+  overflow-y: auto;
+}
+.thanks-overlay.is-open { display: flex; animation: thanksFade 0.5s var(--ease); }
+
+.thanks-card {
+  position: relative;
+  width: 100%;
+  max-width: 520px;
+  background: var(--bg);
+  color: var(--ink);
+  text-align: center;
+  padding: 44px 32px 40px;
+  border-radius: var(--radius);
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.45);
+  animation: thanksRise 0.7s var(--ease);
+}
+
+.thanks-close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: transparent;
+  border: 1px solid var(--line);
+  color: var(--ink-dim);
+  cursor: pointer;
+  font-size: 16px;
+}
+.thanks-close:hover { color: var(--gold); border-color: var(--gold); }
+
+.thanks-brand {
+  font-family: var(--serif);
+  font-weight: 500;
+  font-size: 17px;
+  letter-spacing: 0.34em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 26px;
+}
+
+.thanks-photo {
+  position: relative;
+  width: 132px;
+  height: 132px;
+  margin: 0 auto 26px;
+}
+.thanks-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 20%;
+  border-radius: 50%;
+  border: 1px solid var(--gold);
+  padding: 5px;
+  background: var(--bg);
+}
+.thanks-check {
+  position: absolute;
+  right: -2px;
+  bottom: 2px;
+  width: 42px;
+  height: 42px;
+  filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.25));
+  animation: thanksPop 0.6s 0.35s var(--ease) both;
+}
+
+.thanks-card h2 {
+  font-family: var(--serif);
+  font-weight: 500;
+  font-size: clamp(30px, 6vw, 38px);
+  line-height: 1.15;
+  margin: 0 0 14px;
+}
+.thanks-lead {
+  font-size: 17px;
+  line-height: 1.6;
+  color: var(--ink);
+  margin: 0 0 8px;
+}
+.thanks-lead strong { font-weight: 500; color: var(--gold); }
+.thanks-sub {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 19px;
+  color: var(--ink-dim);
+  margin: 0 0 28px;
+}
+
+@keyframes thanksFade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes thanksRise { from { opacity: 0; transform: translateY(18px) scale(0.98); } to { opacity: 1; transform: none; } }
+@keyframes thanksPop { from { opacity: 0; transform: scale(0.2); } to { opacity: 1; transform: scale(1); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .thanks-overlay.is-open, .thanks-card, .thanks-check { animation: none; }
+}
