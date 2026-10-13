@@ -1,0 +1,9 @@
+{
+  "name": "ayfilms-website",
+  "version": "1.0.0",
+  "private": true,
+  "description": "ayfilms – Foto & Film für Hochzeiten (Landingpage)",
+  "dependencies": {
+    "nodemailer": "^6.9.14"
+  }
+}
