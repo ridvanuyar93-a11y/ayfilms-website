@@ -13,6 +13,14 @@ function escapeHtml(str) {
     .replace(/"/g, "&quot;");
 }
 
+// Instagram-Angabe bereinigen: @, Profil-Link und Leerzeichen entfernen, nur gültige Zeichen
+function cleanInstagram(v) {
+  let h = String(v || "").trim();
+  h = h.replace(/^https?:\/\/(www\.)?instagram\.com\//i, "").replace(/[/?#].*$/, "");
+  h = h.replace(/^@+/, "").replace(/\s+/g, "");
+  return /^[A-Za-z0-9._]{1,30}$/.test(h) ? h : "";
+}
+
 module.exports = async function handler(req, res) {
   if (req.method !== "POST") {
     res.setHeader("Allow", "POST");
@@ -22,6 +30,7 @@ module.exports = async function handler(req, res) {
   try {
     const body = typeof req.body === "string" ? JSON.parse(req.body) : req.body || {};
     const { name, email, phone, date, location, country, message, company } = body;
+    const instagram = cleanInstagram(body.instagram);
 
     // Honeypot — silently accept but do nothing
     if (company) {
@@ -53,6 +62,7 @@ module.exports = async function handler(req, res) {
       `Namen: ${name}`,
       `E-Mail: ${email}`,
       phone ? `Telefon: ${phone}` : null,
+      instagram ? `Instagram: @${instagram} (https://instagram.com/${instagram})` : null,
       date ? `Datum: ${date}` : null,
       location ? `Location / Ort: ${location}` : null,
       country ? `Land: ${country}` : null,
@@ -68,6 +78,7 @@ module.exports = async function handler(req, res) {
           <tr><td style="color:#888;">Namen</td><td><strong>${escapeHtml(name)}</strong></td></tr>
           <tr><td style="color:#888;">E-Mail</td><td><a href="mailto:${escapeHtml(email)}">${escapeHtml(email)}</a></td></tr>
           ${phone ? `<tr><td style="color:#888;">Telefon</td><td>${escapeHtml(phone)}</td></tr>` : ""}
+          ${instagram ? `<tr><td style="color:#888;">Instagram</td><td><a href="https://instagram.com/${escapeHtml(instagram)}">@${escapeHtml(instagram)}</a></td></tr>` : ""}
           ${date ? `<tr><td style="color:#888;">Datum</td><td>${escapeHtml(date)}</td></tr>` : ""}
           ${location ? `<tr><td style="color:#888;">Location / Ort</td><td>${escapeHtml(location)}</td></tr>` : ""}
           ${country ? `<tr><td style="color:#888;">Land</td><td>${escapeHtml(country)}</td></tr>` : ""}

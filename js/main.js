@@ -221,6 +221,7 @@
         name: formEl.querySelector('input[name="name"]').value.trim(),
         email: formEl.querySelector('input[name="email"]').value.trim(),
         phone: formEl.querySelector('input[name="phone"]').value.trim(),
+        instagram: formEl.querySelector('input[name="instagram"]').value.trim(),
         date: formEl.querySelector('input[name="date"]').value,
         location: formEl.querySelector('input[name="location"]').value.trim(),
         country: formEl.querySelector('select[name="country"]').value,
