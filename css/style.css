@@ -886,6 +886,14 @@ p { margin: 0; }
 .t-card.t-shot img {
   border-radius: 1px;
   margin-bottom: 14px;
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  object-fit: contain;
+  background: #0a0a0a;
+}
+@media (min-width: 900px) {
+  .t-track { overflow-x: visible; }
+  .t-card { flex: 1 1 0; min-width: 0; }
 }
 .t-card.t-shot .who { margin: 0 14px 10px; padding-top: 0; border-top: none; }
 
