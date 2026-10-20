@@ -3,6 +3,30 @@
 
   document.getElementById("year").textContent = new Date().getFullYear();
 
+  /* ---------- Herkunft erfassen (UTM / Meta-Klick), nur für die Anfrage-Mail ----------
+     Wird nur in sessionStorage gehalten und beim Absenden des Formulars mitgeschickt.
+     Es wird nichts an Dritte gesendet. */
+  var ATTR_KEY = "ayf_attr";
+  function readAttribution() {
+    var stored = null;
+    try { stored = JSON.parse(sessionStorage.getItem(ATTR_KEY) || "null"); } catch (e) {}
+    var qs = new URLSearchParams(window.location.search);
+    var hasCampaign = false;
+    var fresh = { landing: window.location.pathname, referrer: "" };
+    ["utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term", "utm_id", "fbclid"].forEach(function (k) {
+      var v = qs.get(k);
+      if (v) { fresh[k] = v.slice(0, 150); hasCampaign = true; }
+    });
+    try {
+      if (document.referrer) fresh.referrer = new URL(document.referrer).hostname;
+    } catch (e) {}
+    // Neue Kampagnen-Parameter überschreiben, sonst bleibt der erste Besuch der Session erhalten
+    var result = hasCampaign || !stored ? fresh : stored;
+    try { sessionStorage.setItem(ATTR_KEY, JSON.stringify(result)); } catch (e) {}
+    return result;
+  }
+  var attribution = readAttribution();
+
   /* ---------- Nav scroll state ---------- */
   var nav = document.getElementById("nav");
   function onScroll() {
@@ -225,7 +249,8 @@
         date: formEl.querySelector('input[name="date"]').value,
         location: formEl.querySelector('input[name="location"]').value.trim(),
         country: formEl.querySelector('select[name="country"]').value,
-        message: formEl.querySelector('textarea[name="message"]').value.trim()
+        message: formEl.querySelector('textarea[name="message"]').value.trim(),
+        attribution: attribution
       };
 
       if (!data.name || !data.email) {
