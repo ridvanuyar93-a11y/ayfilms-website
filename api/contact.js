@@ -79,7 +79,8 @@ module.exports = async function handler(req, res) {
       }
     });
 
-    const subject = "HOCHZEITSANFRAGE AYFILMS 🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨" + (attr.utm_source || attr.fbclid ? ` | ${attr.utm_content || attr.utm_campaign || "Meta"}` : "");
+    const subjectName = String(name).replace(/[\r\n\t]+/g, " ").replace(/\s+/g, " ").trim().slice(0, 60) || "AYFILMS";
+    const subject = `HOCHZEITSANFRAGE ${subjectName} 🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨` + (attr.utm_source || attr.fbclid ? ` | ${attr.utm_content || attr.utm_campaign || "Meta"}` : "");
 
     const textBody = [
       "Neue Hochzeitsanfrage über ayfilms.de",
