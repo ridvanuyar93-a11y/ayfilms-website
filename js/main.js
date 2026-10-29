@@ -231,6 +231,17 @@
     if (e.key === "Escape" && thanksOverlay && thanksOverlay.classList.contains("is-open")) hideThanks();
   });
 
+  /* ---------- Hochzeitsdatum: keine Daten in der Vergangenheit ---------- */
+  function todayISO() {
+    var d = new Date();
+    var m = String(d.getMonth() + 1).padStart(2, "0");
+    var day = String(d.getDate()).padStart(2, "0");
+    return d.getFullYear() + "-" + m + "-" + day;
+  }
+  document.querySelectorAll('input[type="date"][name="date"]').forEach(function (el) {
+    el.setAttribute("min", todayISO());
+  });
+
   /* ---------- Form submission (both forms post to /api/contact) ---------- */
   function wireForm(formEl, statusEl, submitBtn, onSuccess) {
     if (!formEl) return;
@@ -256,6 +267,15 @@
       if (!data.name || !data.email) {
         statusEl.textContent = "Bitte Namen und E-Mail ausfüllen.";
         statusEl.className = "form-status err";
+        return;
+      }
+
+      // ISO-Datumsstrings (JJJJ-MM-TT) lassen sich direkt vergleichen
+      if (data.date && data.date < todayISO()) {
+        statusEl.textContent = "Bitte prüft euer Hochzeitsdatum – es liegt in der Vergangenheit. Wenn es noch nicht feststeht, lasst das Feld einfach leer.";
+        statusEl.className = "form-status err";
+        var dateEl = formEl.querySelector('input[name="date"]');
+        if (dateEl) dateEl.focus();
         return;
       }
 
